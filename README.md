@@ -18,3 +18,17 @@ Since GazeBase does not contain Karolinska Sleepiness Scale (KSS) ratings or any
 2. **Preprocessing:** Verify dataset constraints (1000 Hz sampling, `val` / `lab` columns) and compute saccadic peak velocities.
 3. **Exploration & Plotting:** Generate plots representing the input feature time series, fatigue proxies, and early-vs-late session velocity contrasts.
 4. **Summary Report:** Produce a written report detailing the statistical findings of the exploration.
+
+## Visualizations
+
+### Plot 1: Input Feature Time Series
+Illustrates the variance in saccadic velocity and the overall trendline across a single session, comparing low-complexity (reading) vs high-complexity (video viewing) tasks.
+![Input Feature Time Series](plots/01_input_feature_timeseries.png)
+
+### Plot 2: Fatigue Proxies
+Evaluates the within-session (time-on-task) and between-session theoretical fatigue proxies. The within-session proxy proved robust across almost all tasks, with a consistent downward trajectory in peak velocity as the task progresses.
+![Fatigue Proxies](plots/02_fatigue_proxies.png)
+
+### Plot 3: Within-Session Velocity Decline
+Displays the velocity differential between the first 25% and the last 25% of each session. Points dropping beneath the `y=x` identity line represent a velocity decrease over the session.
+![Early vs Late Velocity Contrast](plots/03_early_late_velocity.png)
