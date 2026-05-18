@@ -135,9 +135,9 @@ def main():
     
     print_flush(f"Found {len(multi_round_subjects)} subjects in multiple rounds.")
     
-    # Select 10 subjects
-    selected_subjects = multi_round_subjects[:10]
-    print_flush(f"Selected 10 subjects: {selected_subjects}")
+    # Select 50 subjects
+    selected_subjects = multi_round_subjects[:50]
+    print_flush(f"Selected 50 subjects: {selected_subjects}")
     
     data_dir = os.path.join("data")
     os.makedirs(data_dir, exist_ok=True)
@@ -148,6 +148,19 @@ def main():
         files_to_download = subject_files[subject]
         for filename in files_to_download:
             try:
+                # Parse round number and subject ID from filename: e.g. Round_1/Subject_1001.zip
+                match = pattern.search(filename)
+                if match:
+                    round_num = match.group(1)
+                    subject_id = match.group('subject')
+                    prefix = f"S_{round_num}{subject_id}_"
+                    
+                    # If we already have >= 12 CSV files for this subject-round, skip it
+                    if os.path.exists(data_dir):
+                        existing_count = sum(1 for x in os.listdir(data_dir) if x.startswith(prefix) and x.endswith('.csv'))
+                        if existing_count >= 12:
+                            continue
+                
                 inner_zip_bytes = z.read(filename)
                 with zipfile.ZipFile(io.BytesIO(inner_zip_bytes)) as inner_z:
                     csv_names = [name for name in inner_z.namelist() if name.endswith('.csv')]
@@ -167,7 +180,7 @@ def main():
     with open(os.path.join(data_dir, "README_data.md"), "w") as rf:
         rf.write("# GazeBase Data Subset\n\n")
         rf.write("This directory contains a subset of the GazeBase dataset downloaded via Figshare.\n")
-        rf.write("Only the following 10 subjects (who appear in multiple rounds) were downloaded to serve as a sample for exploration:\n")
+        rf.write("Only the following 50 subjects (who appear in multiple rounds) were downloaded:\n")
         rf.write(", ".join(selected_subjects) + "\n")
         
 if __name__ == "__main__":
